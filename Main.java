@@ -1,66 +1,41 @@
-import java.util.*;
-
-class Stock {
+class Account {
     String name;
-    int shares;
-    double price;
+    int balance;
 
-    public Stock(String name, int shares, double price) {
+    public Account(String name, int balance) {
         this.name = name;
-        this.shares = shares;
-        this.price = price;
+        this.balance = balance;
     }
 
-    public String getName() {
-        return this.name;
+    public void credit(int amount) {
+        balance += amount;
+        System.out.println(amount + " credited to the account of " + name);
     }
 
-    public int getShares() {
-        return this.shares;
+    public void debit(int amount) {
+        if (amount > balance) {
+            System.out.println("Debit amount exceeded account balance.");
+        } else {
+            balance -= amount;
+            System.out.println(amount + " debited from the account of " + name);
+        }
     }
+}
 
-    public double getPrice() {
-        return this.price;
-    }
+class AccountTest {
+    public void testDebit() {
+        Account account = new Account("John Doe", 1000);
+        account.debit(100);
+        assert account.balance == 900 : "Expected balance: 900, actual balance: " + account.balance;
 
-    public double getValue() {
-        return this.shares * this.price;
+        account.debit(1000);
+        assert account.balance == 900 : "Expected balance: 900, actual balance: " + account.balance;
     }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Stock> stocks = new ArrayList<>();
-        double totalValue = 0.0;
-
-        System.out.print("Enter number of stocks: ");
-        int n = scanner.nextInt();
-        scanner.nextLine();
-
-        for (int i = 0; i < n; i++) {
-            System.out.print("Enter stock name: ");
-            String name = scanner.nextLine();
-            System.out.print("Enter number of shares: ");
-            int shares = scanner.nextInt();
-            System.out.print("Enter share price: ");
-            double price = scanner.nextDouble();
-            scanner.nextLine();
-
-            Stock stock = new Stock(name, shares, price);
-            stocks.add(stock);
-            totalValue += stock.getValue();
-        }
-
-        System.out.println("Stock Report:");
-        System.out.println("------------");
-        for (Stock stock : stocks) {
-            System.out.println("Name: " + stock.getName());
-            System.out.println("Shares: " + stock.getShares());
-            System.out.println("Price: " + stock.getPrice());
-            System.out.println("Value: " + stock.getValue());
-            System.out.println("--------------");
-        }
-        System.out.println("Total Value: " + totalValue);
+        AccountTest test = new AccountTest();
+        test.testDebit();
     }
 }
